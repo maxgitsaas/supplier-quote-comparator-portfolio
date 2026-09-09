@@ -1,3 +1,5 @@
+import ComparisonCard from "@/components/ComparisonCard";
+
 const comparisons = [
   {
     id: 1,
@@ -21,11 +23,7 @@ export default function Home() {
       <h2>Your Comparisons</h2>
 
       {comparisons.map((comparison) => (
-        <div key={comparison.id}>
-          <h3>{comparison.name}</h3>
-          <p>{comparison.suppliers} supplier quotes</p>
-          <p>{comparison.date}</p>
-        </div>
+        <ComparisonCard key={comparison.id} comparison={comparison} />
       ))}
     </main>
   );
