@@ -107,3 +107,29 @@ section div label {
   font-weight: normal;
   color: #666;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+th,
+td {
+  padding: 14px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+thead th {
+  background: #f3f3f3;
+}
+
+tbody th {
+  background: #fafafa;
+  width: 180px;
+}
+
+tbody tr:nth-child(3) {
+  font-weight: bold;
+}
