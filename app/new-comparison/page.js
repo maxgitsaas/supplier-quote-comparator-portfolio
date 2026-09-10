@@ -3,19 +3,32 @@ export default function NewComparison() {
     <main>
       <h1>New Comparison</h1>
 
-      <label>
-        Comparison Name
-        <input type="text" />
-      </label>
+      <section>
+        <h2>Comparison Details</h2>
 
-      <h2>Items</h2>
+        <label>
+          Comparison Name
+          <input type="text" placeholder="e.g. Office Furniture" />
+        </label>
+      </section>
 
-      <div>
-        <input type="text" placeholder="Item name" />
-        <input type="number" placeholder="Quantity" />
-      </div>
+      <section>
+        <h2>Requested Items</h2>
 
-      <button>+ Add Item</button>
+        <div>
+          <label>
+            Item Name
+            <input type="text" placeholder="e.g. Office Chair" />
+          </label>
+
+          <label>
+            Quantity
+            <input type="number" placeholder="e.g. 20" />
+          </label>
+        </div>
+
+        <button>+ Add Item</button>
+      </section>
 
       <button>Create Comparison</button>
     </main>
