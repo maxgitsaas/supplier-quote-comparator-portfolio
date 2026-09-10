@@ -1,3 +1,4 @@
+import Link from "next/link";
 import ComparisonCard from "@/components/ComparisonCard";
 
 const comparisons = [
@@ -19,7 +20,9 @@ export default function Home() {
   return (
     <main>
       <h1>Supplier Quote Comparator</h1>
-      <button>+ New Comparison</button>
+      <Link href="/new-comparison">
+        <button>+ New Comparison</button>
+      </Link>
       <h2>Your Comparisons</h2>
 
       {comparisons.map((comparison) => (
