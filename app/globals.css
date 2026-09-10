@@ -130,6 +130,8 @@ tbody th {
   width: 180px;
 }
 
-tbody tr:nth-child(3) {
+.total-row th,
+.total-row td {
   font-weight: bold;
+  background: #e8f5e9;
 }
