@@ -8,12 +8,6 @@ const comparisons = [
     suppliers: 3,
     date: "September 8, 2026",
   },
-  {
-    id: 2,
-    name: "New Laptops",
-    suppliers: 2,
-    date: "September 5, 2026",
-  },
 ];
 
 export default function Home() {

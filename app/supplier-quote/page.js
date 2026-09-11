@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const items = [
   {
     id: 1,
@@ -20,6 +22,12 @@ export default function SupplierQuote() {
   return (
     <main>
       <h1>Supplier Quote</h1>
+
+      <p>Comparison: Office Furniture</p>
+
+      <Link href="/comparison">
+        <button>Back to Comparison</button>
+      </Link>
 
       <section>
         <h2>Supplier Details</h2>
