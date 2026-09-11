@@ -19,10 +19,72 @@ h1 {
   margin-bottom: 20px;
 }
 
-button {
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
   padding: 10px 16px;
-  margin-bottom: 30px;
+  border-radius: 8px;
+
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* Main actions: Save Quote, Create Comparison */
+.button-primary {
+  background: #222;
+  color: white;
+  border: 1px solid #222;
+}
+
+.button-primary:hover {
+  background: #000;
+}
+
+/* Supporting actions: Add Supplier Quote, Add Item */
+.button-secondary {
+  background: white;
+  color: #222;
+  border: 1px solid #aaa;
+}
+
+.button-secondary:hover {
+  background: #f5f5f5;
+  border-color: #777;
+}
+
+/* Context navigation: Back to Comparison */
+.button-context {
+  background: white;
+  color: #444;
+  border: 1px solid #ccc;
+}
+
+.button-context:hover {
+  background: #f5f5f5;
+}
+
+/* Global navigation: Back to Dashboard */
+.back-dashboard {
+  display: inline-block;
+  margin-bottom: 16px;
+
+  color: #555;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.back-dashboard:hover {
+  color: #111;
+  text-decoration: underline;
 }
 
 main > div {

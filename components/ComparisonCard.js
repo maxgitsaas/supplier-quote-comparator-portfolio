@@ -7,7 +7,9 @@ export default function ComparisonCard({ comparison }) {
       <p>{comparison.suppliers} supplier quotes</p>
       <p>{comparison.date}</p>
 
-      <Link href="/comparison">View Comparison</Link>
+      <Link href="/comparison" className="button button-secondary">
+        View Comparison
+      </Link>
     </div>
   );
 }

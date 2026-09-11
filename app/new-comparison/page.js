@@ -1,6 +1,12 @@
+import Link from "next/link";
+
 export default function NewComparison() {
   return (
     <main>
+      <Link href="/" className="back-dashboard">
+        ← Back to Dashboard
+      </Link>
+
       <h1>New Comparison</h1>
 
       <section>
@@ -27,10 +33,10 @@ export default function NewComparison() {
           </label>
         </div>
 
-        <button>+ Add Item</button>
+        <button className="button button-secondary">+ Add Item</button>
       </section>
 
-      <button>Create Comparison</button>
+      <button className="button button-primary">Create Comparison</button>
     </main>
   );
 }

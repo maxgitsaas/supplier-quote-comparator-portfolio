@@ -45,10 +45,14 @@ const suppliers = [
 export default function Comparison() {
   return (
     <main>
+      <Link href="/" className="back-dashboard">
+        ← Back to Dashboard
+      </Link>
+
       <h1>Office Furniture Comparison</h1>
 
-      <Link href="/supplier-quote">
-        <button>Add Supplier Quote</button>
+      <Link href="/supplier-quote" className="button button-secondary">
+        + Add Supplier Quote
       </Link>
 
       <section>

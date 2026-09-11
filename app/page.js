@@ -14,8 +14,8 @@ export default function Home() {
   return (
     <main>
       <h1>Supplier Quote Comparator</h1>
-      <Link href="/new-comparison">
-        <button>+ New Comparison</button>
+      <Link href="/new-comparison" className="button button-primary">
+        + New Comparison
       </Link>
       <h2>Your Comparisons</h2>
 

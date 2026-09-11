@@ -22,12 +22,16 @@ const items = [
 export default function SupplierQuote() {
   return (
     <main>
+      <Link href="/" className="back-dashboard">
+        ← Back to Dashboard
+      </Link>
+
       <h1>Supplier Quote</h1>
 
       <p>Comparison: Office Furniture</p>
 
-      <Link href="/comparison">
-        <button>Back to Comparison</button>
+      <Link href="/comparison" className="button button-context">
+        ← Back to Comparison
       </Link>
 
       <section>
@@ -59,7 +63,7 @@ export default function SupplierQuote() {
         ))}
       </section>
 
-      <button>Save Quote</button>
+      <button className="button button-primary">Save Quote</button>
     </main>
   );
 }
