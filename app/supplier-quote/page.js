@@ -1,4 +1,5 @@
 import Link from "next/link";
+import QuoteItemCard from "@/components/QuoteItemCard";
 
 const items = [
   {
@@ -54,22 +55,7 @@ export default function SupplierQuote() {
         <h2>Quoted Items</h2>
 
         {items.map((item) => (
-          <div className="quoted-item" key={item.id}>
-            <h3>
-              {item.name}
-              <span>Quantity: {item.quantity}</span>
-            </h3>
-
-            <label>
-              Unit Price
-              <input type="number" placeholder="e.g. 145" />
-            </label>
-
-            <label>
-              Availability
-              <input type="text" placeholder="e.g. In stock" />
-            </label>
-          </div>
+          <QuoteItemCard key={item.id} item={item} />
         ))}
       </section>
 
