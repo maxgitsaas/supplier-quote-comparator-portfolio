@@ -21,16 +21,19 @@ const items = [
 
 export default function SupplierQuote() {
   return (
-    <main>
+    <main className="page-supplier-quote">
       <Link href="/" className="back-dashboard">
         ← Back to Dashboard
       </Link>
 
-      <h1>Supplier Quote</h1>
+      <header className="page-header">
+        <p className="page-header-label">Enter Quote</p>
+        <h1>Supplier Quote</h1>
+      </header>
 
       <p>Comparison: Office Furniture</p>
 
-      <Link href="/comparison" className="button button-context">
+      <Link href="/comparison" className="button button-context page-action">
         ← Back to Comparison
       </Link>
 

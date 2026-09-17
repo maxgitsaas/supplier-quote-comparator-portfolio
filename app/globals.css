@@ -197,3 +197,52 @@ tbody th {
   font-weight: bold;
   background: #e8f5e9;
 }
+
+/* Page identities */
+
+.page-dashboard {
+  --page-accent: #1d4ed8;
+  --page-accent-light: #dbeafe;
+}
+
+.page-new-comparison {
+  --page-accent: #15803d;
+  --page-accent-light: #dcfce7;
+}
+
+.page-supplier-quote {
+  --page-accent: #b45309;
+  --page-accent-light: #fef3c7;
+}
+
+.page-comparison {
+  --page-accent: #6d28d9;
+  --page-accent-light: #ede9fe;
+}
+
+.page-header {
+  padding: 18px 20px;
+  margin-bottom: 24px;
+
+  background: var(--page-accent-light);
+  border-left: 5px solid var(--page-accent);
+  border-radius: 8px;
+}
+
+.page-header-label {
+  margin: 0 0 6px;
+
+  color: var(--page-accent);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.page-header h1 {
+  margin: 0;
+}
+
+.page-action {
+  margin-bottom: 20px;
+}

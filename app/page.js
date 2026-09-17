@@ -12,8 +12,12 @@ const comparisons = [
 
 export default function Home() {
   return (
-    <main>
-      <h1>Supplier Quote Comparator</h1>
+    <main className="page-dashboard">
+      <header className="page-header">
+        <p className="page-header-label">Dashboard</p>
+        <h1>Supplier Quote Comparator</h1>
+      </header>
+
       <Link href="/new-comparison" className="button button-primary">
         + New Comparison
       </Link>

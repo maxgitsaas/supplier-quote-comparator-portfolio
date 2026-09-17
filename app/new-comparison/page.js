@@ -21,12 +21,15 @@ export default function NewComparison() {
   }
 
   return (
-    <main>
+    <main className="page-new-comparison">
       <Link href="/" className="back-dashboard">
         ← Back to Dashboard
       </Link>
 
-      <h1>New Comparison</h1>
+      <header className="page-header">
+        <p className="page-header-label">Create</p>
+        <h1>New Comparison</h1>
+      </header>
 
       <section>
         <h2>Comparison Details</h2>
