@@ -246,3 +246,10 @@ tbody th {
 .page-action {
   margin-bottom: 20px;
 }
+
+.form-error {
+  margin: 12px 0 14px;
+  color: #b91c1c;
+  font-size: 14px;
+  font-weight: 600;
+}

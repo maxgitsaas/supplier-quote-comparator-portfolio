@@ -7,19 +7,28 @@ export default function NewComparison() {
   const [itemName, setItemName] = useState("");
   const [quantity, setQuantity] = useState("");
   const [requestedItems, setRequestedItems] = useState([]);
+  const [itemError, setItemError] = useState("");
 
+  //ADD ITEM FUNCTION
   function handleAddItem() {
+    if (itemName.trim() === "" || Number(quantity) <= 0) {
+      setItemError("Enter an item name and a quantity greater than zero.");
+      return;
+    }
+
     const newItem = {
-      name: itemName,
-      quantity: quantity,
+      name: itemName.trim(),
+      quantity: Number(quantity),
     };
 
     setRequestedItems([...requestedItems, newItem]);
 
     setItemName("");
     setQuantity("");
+    setItemError("");
   }
 
+  //REMOVE ITEM FUNCTION
   function handleRemoveItem(indexToRemove) {
     setRequestedItems((currentItems) =>
       currentItems.filter((_, index) => index !== indexToRemove),
@@ -76,26 +85,32 @@ export default function NewComparison() {
           </label>
         </div>
 
-        <button className="button button-secondary" onClick={handleAddItem}>
+        {itemError && <p className="form-error">{itemError}</p>}
+
+        <button
+          type="button"
+          className="button button-secondary"
+          onClick={handleAddItem}
+        >
           + Add Item
         </button>
+
+        {requestedItems.map((item, index) => (
+          <div key={index}>
+            <p>
+              {item.name} — Quantity: {item.quantity}
+            </p>
+
+            <button
+              type="button"
+              className="button button-secondary"
+              onClick={() => handleRemoveItem(index)}
+            >
+              Remove
+            </button>
+          </div>
+        ))}
       </section>
-
-      {requestedItems.map((item, index) => (
-        <div key={index}>
-          <p>
-            {item.name} — Quantity: {item.quantity}
-          </p>
-
-          <button
-            type="button"
-            className="button button-secondary"
-            onClick={() => handleRemoveItem(index)}
-          >
-            Remove
-          </button>
-        </div>
-      ))}
 
       <button className="button button-primary">Create Comparison</button>
     </main>
