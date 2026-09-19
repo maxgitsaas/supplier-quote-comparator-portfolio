@@ -20,6 +20,12 @@ export default function NewComparison() {
     setQuantity("");
   }
 
+  function handleRemoveItem(indexToRemove) {
+    setRequestedItems((currentItems) =>
+      currentItems.filter((_, index) => index !== indexToRemove),
+    );
+  }
+
   return (
     <main className="page-new-comparison">
       <Link href="/" className="back-dashboard">
@@ -70,16 +76,26 @@ export default function NewComparison() {
           </label>
         </div>
 
-        {requestedItems.map((item, index) => (
-          <p key={index}>
-            {item.name} — Quantity: {item.quantity}
-          </p>
-        ))}
-
         <button className="button button-secondary" onClick={handleAddItem}>
           + Add Item
         </button>
       </section>
+
+      {requestedItems.map((item, index) => (
+        <div key={index}>
+          <p>
+            {item.name} — Quantity: {item.quantity}
+          </p>
+
+          <button
+            type="button"
+            className="button button-secondary"
+            onClick={() => handleRemoveItem(index)}
+          >
+            Remove
+          </button>
+        </div>
+      ))}
 
       <button className="button button-primary">Create Comparison</button>
     </main>
