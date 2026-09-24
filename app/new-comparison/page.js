@@ -3,13 +3,30 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function NewComparison() {
+  // =========================
+  // STATE
+  // =========================
+
+  // Overall comparison data
   const [comparisonName, setComparisonName] = useState("");
+
+  // Temporary input values for a new requested item
   const [itemName, setItemName] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [requestedItems, setRequestedItems] = useState([]);
-  const [itemError, setItemError] = useState("");
 
-  //ADD ITEM FUNCTION
+  // Items already added to the comparison
+  const [requestedItems, setRequestedItems] = useState([]);
+
+  // Validation messages
+  const [itemError, setItemError] = useState("");
+  const [formError, setFormError] = useState("");
+
+  // =========================
+  // REQUESTED ITEM HANDLERS
+  // =========================
+
+  // Validate the item inputs, create an item,
+  // and add it to the requestedItems array.
   function handleAddItem() {
     if (itemName.trim() === "" || Number(quantity) <= 0) {
       setItemError("Enter an item name and a quantity greater than zero.");
@@ -28,12 +45,45 @@ export default function NewComparison() {
     setItemError("");
   }
 
-  //REMOVE ITEM FUNCTION
+  // Remove the requested item at the selected array index.
   function handleRemoveItem(indexToRemove) {
     setRequestedItems((currentItems) =>
       currentItems.filter((_, index) => index !== indexToRemove),
     );
   }
+
+  // =========================
+  // FORM SUBMISSION
+  // =========================
+
+  // Validate the full comparison and build
+  // the final comparison object.
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    if (comparisonName.trim() === "") {
+      setFormError("Enter a comparison name.");
+      return;
+    }
+
+    if (requestedItems.length === 0) {
+      setFormError("Add at least one requested item.");
+      return;
+    }
+
+    const newComparison = {
+      name: comparisonName.trim(),
+      items: requestedItems,
+    };
+
+    setFormError("");
+
+    console.log("Created comparison:", newComparison);
+  }
+
+  // =========================
+  // PAGE UI
+  // =========================
 
   return (
     <main className="page-new-comparison">
@@ -46,73 +96,84 @@ export default function NewComparison() {
         <h1>New Comparison</h1>
       </header>
 
-      <section>
-        <h2>Comparison Details</h2>
+      <form onSubmit={handleSubmit}>
+        {/* Comparison Details */}
+        <section>
+          <h2>Comparison Details</h2>
 
-        <label>
-          Comparison Name
-          <input
-            type="text"
-            placeholder="e.g. Office Furniture"
-            value={comparisonName}
-            onChange={(event) => setComparisonName(event.target.value)}
-          />
-        </label>
-      </section>
-
-      <section>
-        <h2>Requested Items</h2>
-
-        <div>
           <label>
-            Item Name
+            Comparison Name
             <input
               type="text"
-              placeholder="e.g. Office Chair"
-              value={itemName}
-              onChange={(event) => setItemName(event.target.value)}
+              placeholder="e.g. Office Furniture"
+              value={comparisonName}
+              onChange={(event) => setComparisonName(event.target.value)}
             />
           </label>
+        </section>
 
-          <label>
-            Quantity
-            <input
-              type="number"
-              placeholder="e.g. 20"
-              value={quantity}
-              onChange={(event) => setQuantity(event.target.value)}
-            />
-          </label>
-        </div>
+        <section>
+          {/* Requested Items */}
+          <h2>Requested Items</h2>
 
-        {itemError && <p className="form-error">{itemError}</p>}
+          <div>
+            <label>
+              Item Name
+              <input
+                type="text"
+                placeholder="e.g. Office Chair"
+                value={itemName}
+                onChange={(event) => setItemName(event.target.value)}
+              />
+            </label>
 
-        <button
-          type="button"
-          className="button button-secondary"
-          onClick={handleAddItem}
-        >
-          + Add Item
-        </button>
-
-        {requestedItems.map((item, index) => (
-          <div key={index}>
-            <p>
-              {item.name} — Quantity: {item.quantity}
-            </p>
-
-            <button
-              type="button"
-              className="button button-secondary"
-              onClick={() => handleRemoveItem(index)}
-            >
-              Remove
-            </button>
+            <label>
+              Quantity
+              <input
+                type="number"
+                placeholder="e.g. 20"
+                value={quantity}
+                onChange={(event) => setQuantity(event.target.value)}
+              />
+            </label>
           </div>
-        ))}
-      </section>
 
-      <button className="button button-primary">Create Comparison</button>
+          {/* Display Item Error */}
+          {itemError && <p className="form-error">{itemError}</p>}
+
+          <button
+            type="button"
+            className="button button-secondary"
+            onClick={handleAddItem}
+          >
+            + Add Item
+          </button>
+
+          {/* Map Added Items Below */}
+          {requestedItems.map((item, index) => (
+            <div key={index}>
+              <p>
+                {item.name} — Quantity: {item.quantity}
+              </p>
+
+              <button
+                type="button"
+                className="button button-secondary"
+                onClick={() => handleRemoveItem(index)}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+        </section>
+
+        {/* Display Form Error */}
+        {formError && <p className="form-error">{formError}</p>}
+
+        <button type="submit" className="button button-primary">
+          Create Comparison
+        </button>
+      </form>
     </main>
   );
 }
