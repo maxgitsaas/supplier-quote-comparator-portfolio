@@ -1,11 +1,15 @@
 "use client";
-import { useState } from "react";
+
+import { useContext, useState } from "react";
 import Link from "next/link";
+import { ComparisonContext } from "../context/ComparisonContext";
 
 export default function NewComparison() {
   // =========================
   // STATE
   // =========================
+
+  const { setComparison } = useContext(ComparisonContext);
 
   // Overall comparison data
   const [comparisonName, setComparisonName] = useState("");
@@ -75,6 +79,8 @@ export default function NewComparison() {
       name: comparisonName.trim(),
       items: requestedItems,
     };
+
+    setComparison(newComparison);
 
     setFormError("");
 
