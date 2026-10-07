@@ -1,25 +1,51 @@
+"use client";
+
+import { useContext, useState } from "react";
 import Link from "next/link";
 import QuoteItemCard from "@/components/QuoteItemCard";
-
-const items = [
-  {
-    id: 1,
-    name: "Office Chair",
-    quantity: 20,
-  },
-  {
-    id: 2,
-    name: "Standing Desk",
-    quantity: 10,
-  },
-  {
-    id: 3,
-    name: "Monitor Arm",
-    quantity: 20,
-  },
-];
+import { ComparisonContext } from "../context/ComparisonContext";
 
 export default function SupplierQuote() {
+  const { comparison, setSupplierQuotes } = useContext(ComparisonContext);
+
+  const [supplierName, setSupplierName] = useState("");
+  const [deliveryCost, setDeliveryCost] = useState("");
+  const [leadTime, setLeadTime] = useState("");
+
+  const [quoteItems, setQuoteItems] = useState(
+    comparison
+      ? comparison.items.map((item) => ({
+          ...item,
+          unitPrice: "",
+          availability: "",
+        }))
+      : [],
+  );
+
+  function handleItemChange(index, field, value) {
+    setQuoteItems((currentItems) =>
+      currentItems.map((item, itemIndex) =>
+        itemIndex === index
+          ? {
+              ...item,
+              [field]: value,
+            }
+          : item,
+      ),
+    );
+  }
+
+  function handleSaveQuote() {
+    const supplierQuote = {
+      supplierName,
+      deliveryCost,
+      leadTime,
+      items: quoteItems,
+    };
+
+    setSupplierQuotes((currentQuotes) => [...currentQuotes, supplierQuote]);
+  }
+
   return (
     <main className="page-supplier-quote">
       <Link href="/" className="back-dashboard">
@@ -31,7 +57,7 @@ export default function SupplierQuote() {
         <h1>Supplier Quote</h1>
       </header>
 
-      <p>Comparison: Office Furniture</p>
+      {comparison && <p>Comparison: {comparison.name}</p>}
 
       <Link href="/comparison" className="button button-context page-action">
         ← Back to Comparison
@@ -43,17 +69,32 @@ export default function SupplierQuote() {
         <div>
           <label>
             Supplier Name
-            <input type="text" placeholder="e.g. Acme Office Supplies" />
+            <input
+              type="text"
+              placeholder="e.g. Acme Supplies"
+              value={supplierName}
+              onChange={(event) => setSupplierName(event.target.value)}
+            />
           </label>
 
           <label>
             Delivery Cost
-            <input type="number" placeholder="e.g. 120" />
+            <input
+              type="number"
+              placeholder="e.g. 75"
+              value={deliveryCost}
+              onChange={(event) => setDeliveryCost(event.target.value)}
+            />
           </label>
 
           <label>
             Lead Time
-            <input type="text" placeholder="e.g. 7 days" />
+            <input
+              type="number"
+              placeholder="e.g. 7"
+              value={leadTime}
+              onChange={(event) => setLeadTime(event.target.value)}
+            />
           </label>
         </div>
       </section>
@@ -61,12 +102,19 @@ export default function SupplierQuote() {
       <section>
         <h2>Quoted Items</h2>
 
-        {items.map((item) => (
-          <QuoteItemCard key={item.id} item={item} />
+        {quoteItems.map((item, index) => (
+          <QuoteItemCard
+            key={index}
+            item={item}
+            index={index}
+            onItemChange={handleItemChange}
+          />
         ))}
       </section>
 
-      <button className="button button-primary">Save Quote</button>
+      <button className="button button-primary" onClick={handleSaveQuote}>
+        Save Quote
+      </button>
     </main>
   );
 }

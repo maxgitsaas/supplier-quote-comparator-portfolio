@@ -1,4 +1,4 @@
-export default function QuoteItemCard({ item }) {
+export default function QuoteItemCard({ item, index, onItemChange }) {
   return (
     <div className="quoted-item">
       <h3>
@@ -8,12 +8,24 @@ export default function QuoteItemCard({ item }) {
 
       <label>
         Unit Price
-        <input type="number" placeholder="e.g. 145" />
+        <input
+          type="number"
+          value={item.unitPrice}
+          onChange={(event) =>
+            onItemChange(index, "unitPrice", event.target.value)
+          }
+        />
       </label>
 
       <label>
         Availability
-        <input type="text" placeholder="e.g. In stock" />
+        <input
+          type="text"
+          value={item.availability}
+          onChange={(event) =>
+            onItemChange(index, "availability", event.target.value)
+          }
+        />
       </label>
     </div>
   );
