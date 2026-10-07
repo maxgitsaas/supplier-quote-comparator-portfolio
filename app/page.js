@@ -1,16 +1,13 @@
+"use client";
+
+import { useContext } from "react";
 import Link from "next/link";
 import ComparisonCard from "@/components/ComparisonCard";
-
-const comparisons = [
-  {
-    id: 1,
-    name: "Office Furniture",
-    suppliers: 3,
-    date: "September 8, 2026",
-  },
-];
+import { ComparisonContext } from "./context/ComparisonContext";
 
 export default function Home() {
+  const { comparison, supplierQuotes } = useContext(ComparisonContext);
+
   return (
     <main className="page-dashboard">
       <header className="page-header">
@@ -21,11 +18,20 @@ export default function Home() {
       <Link href="/new-comparison" className="button button-primary">
         + New Comparison
       </Link>
+
       <h2>Your Comparisons</h2>
 
-      {comparisons.map((comparison) => (
-        <ComparisonCard key={comparison.id} comparison={comparison} />
-      ))}
+      {comparison ? (
+        <ComparisonCard
+          comparison={{
+            name: comparison.name,
+            items: comparison.items.length,
+            suppliers: supplierQuotes.length,
+          }}
+        />
+      ) : (
+        <p>No comparisons created yet.</p>
+      )}
     </main>
   );
 }

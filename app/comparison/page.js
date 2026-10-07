@@ -1,48 +1,24 @@
-import Link from "next/link";
+"use client";
 
-const suppliers = [
-  {
-    id: 1,
-    name: "Acme Office Supplies",
-    items: {
-      officeChair: 2900,
-      standingDesk: 3800,
-      monitorArm: 1080,
-    },
-    itemsTotal: 7780,
-    delivery: 120,
-    total: 7900,
-    leadTime: "7 days",
-  },
-  {
-    id: 2,
-    name: "OfficeCo",
-    items: {
-      officeChair: 2700,
-      standingDesk: 3900,
-      monitorArm: 1040,
-    },
-    itemsTotal: 7640,
-    delivery: 300,
-    total: 7940,
-    leadTime: "14 days",
-  },
-  {
-    id: 3,
-    name: "FurniPro",
-    items: {
-      officeChair: 3000,
-      standingDesk: 3700,
-      monitorArm: 1120,
-    },
-    itemsTotal: 7820,
-    delivery: 0,
-    total: 7820,
-    leadTime: "5 days",
-  },
-];
+import { useContext } from "react";
+import Link from "next/link";
+import { ComparisonContext } from "../context/ComparisonContext";
 
 export default function Comparison() {
+  const { comparison, supplierQuotes } = useContext(ComparisonContext);
+
+  if (!comparison) {
+    return (
+      <main className="page-comparison">
+        <p>No comparison has been created yet.</p>
+
+        <Link href="/" className="back-dashboard">
+          ← Back to Dashboard
+        </Link>
+      </main>
+    );
+  }
+
   return (
     <main className="page-comparison">
       <Link href="/" className="back-dashboard">
@@ -51,7 +27,7 @@ export default function Comparison() {
 
       <header className="page-header">
         <p className="page-header-label">Compare</p>
-        <h1>Office Furniture Comparison</h1>
+        <h1>{comparison.name}</h1>
       </header>
 
       <Link
@@ -64,75 +40,57 @@ export default function Comparison() {
       <section>
         <h2>Supplier Comparison</h2>
 
-        <table>
-          <thead>
-            <tr>
-              <th></th>
+        {supplierQuotes.length === 0 ? (
+          <p>No supplier quotes added yet.</p>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
 
-              {suppliers.map((supplier) => (
-                <th key={supplier.id}>{supplier.name}</th>
+                {supplierQuotes.map((quote, index) => (
+                  <th key={index}>{quote.supplierName}</th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody>
+              {comparison.items.map((item, itemIndex) => (
+                <tr key={itemIndex}>
+                  <th>
+                    {item.name}
+                    <br />
+                    Quantity: {item.quantity}
+                  </th>
+
+                  {supplierQuotes.map((quote, quoteIndex) => (
+                    <td key={quoteIndex}>
+                      €{quote.items[itemIndex].unitPrice}
+                      <br />
+                      {quote.items[itemIndex].availability}
+                    </td>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          </thead>
 
-          <tbody>
-            <tr>
-              <th>Office Chairs</th>
+              <tr>
+                <th>Delivery</th>
 
-              {suppliers.map((supplier) => (
-                <td key={supplier.id}>€{supplier.items.officeChair}</td>
-              ))}
-            </tr>
+                {supplierQuotes.map((quote, index) => (
+                  <td key={index}>€{quote.deliveryCost}</td>
+                ))}
+              </tr>
 
-            <tr>
-              <th>Standing Desks</th>
+              <tr>
+                <th>Lead Time</th>
 
-              {suppliers.map((supplier) => (
-                <td key={supplier.id}>€{supplier.items.standingDesk}</td>
-              ))}
-            </tr>
-
-            <tr>
-              <th>Monitor Arms</th>
-
-              {suppliers.map((supplier) => (
-                <td key={supplier.id}>€{supplier.items.monitorArm}</td>
-              ))}
-            </tr>
-
-            <tr>
-              <th>Items Total</th>
-
-              {suppliers.map((supplier) => (
-                <td key={supplier.id}>€{supplier.itemsTotal}</td>
-              ))}
-            </tr>
-
-            <tr>
-              <th>Delivery</th>
-
-              {suppliers.map((supplier) => (
-                <td key={supplier.id}>€{supplier.delivery}</td>
-              ))}
-            </tr>
-
-            <tr className="total-row">
-              <th>Total</th>
-
-              {suppliers.map((supplier) => (
-                <td key={supplier.id}>€{supplier.total}</td>
-              ))}
-            </tr>
-
-            <tr>
-              <th>Lead Time</th>
-
-              {suppliers.map((supplier) => (
-                <td key={supplier.id}>{supplier.leadTime}</td>
-              ))}
-            </tr>
-          </tbody>
-        </table>
+                {supplierQuotes.map((quote, index) => (
+                  <td key={index}>{quote.leadTime} days</td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        )}
       </section>
     </main>
   );

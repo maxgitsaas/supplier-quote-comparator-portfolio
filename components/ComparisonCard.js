@@ -4,8 +4,9 @@ export default function ComparisonCard({ comparison }) {
   return (
     <div>
       <h3>{comparison.name}</h3>
+
+      <p>{comparison.items} items</p>
       <p>{comparison.suppliers} supplier quotes</p>
-      <p>{comparison.date}</p>
 
       <Link href="/comparison" className="button button-secondary">
         View Comparison
