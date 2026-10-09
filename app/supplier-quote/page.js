@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import Link from "next/link";
 import QuoteItemCard from "@/components/QuoteItemCard";
 import { ComparisonContext } from "../context/ComparisonContext";
+import { useRouter } from "next/navigation";
 
 export default function SupplierQuote() {
   const { comparison, setSupplierQuotes } = useContext(ComparisonContext);
@@ -11,6 +12,11 @@ export default function SupplierQuote() {
   const [supplierName, setSupplierName] = useState("");
   const [deliveryCost, setDeliveryCost] = useState("");
   const [leadTime, setLeadTime] = useState("");
+
+  const [detailsError, setDetailsError] = useState("");
+  const [itemError, setItemError] = useState("");
+
+  const router = useRouter();
 
   const [quoteItems, setQuoteItems] = useState(
     comparison
@@ -33,9 +39,40 @@ export default function SupplierQuote() {
           : item,
       ),
     );
+
+    setItemError("");
   }
 
   function handleSaveQuote() {
+    if (supplierName.trim() === "") {
+      setDetailsError("Please enter a supplier name.");
+      return;
+    }
+
+    if (deliveryCost === "" || Number(deliveryCost) < 0) {
+      setDetailsError("Please enter a valid delivery cost.");
+      return;
+    }
+
+    if (leadTime === "" || Number(leadTime) < 0) {
+      setDetailsError("Please enter a valid lead time.");
+      return;
+    }
+
+    const invalidItem = quoteItems.some(
+      (item) =>
+        item.unitPrice === "" ||
+        Number(item.unitPrice) < 0 ||
+        item.availability.trim() === "",
+    );
+
+    if (invalidItem) {
+      setItemError(
+        "Please complete the price and availability for every item.",
+      );
+      return;
+    }
+
     const supplierQuote = {
       supplierName,
       deliveryCost,
@@ -44,6 +81,11 @@ export default function SupplierQuote() {
     };
 
     setSupplierQuotes((currentQuotes) => [...currentQuotes, supplierQuote]);
+
+    setDetailsError("");
+    setItemError("");
+
+    router.push("/comparison");
   }
 
   return (
@@ -73,7 +115,10 @@ export default function SupplierQuote() {
               type="text"
               placeholder="e.g. Acme Supplies"
               value={supplierName}
-              onChange={(event) => setSupplierName(event.target.value)}
+              onChange={(event) => {
+                setSupplierName(event.target.value);
+                setDetailsError("");
+              }}
             />
           </label>
 
@@ -81,9 +126,13 @@ export default function SupplierQuote() {
             Delivery Cost
             <input
               type="number"
+              min="0"
               placeholder="e.g. 75"
               value={deliveryCost}
-              onChange={(event) => setDeliveryCost(event.target.value)}
+              onChange={(event) => {
+                setDeliveryCost(event.target.value);
+                setDetailsError("");
+              }}
             />
           </label>
 
@@ -91,12 +140,17 @@ export default function SupplierQuote() {
             Lead Time
             <input
               type="number"
+              min="0"
               placeholder="e.g. 7"
               value={leadTime}
-              onChange={(event) => setLeadTime(event.target.value)}
+              onChange={(event) => {
+                setLeadTime(event.target.value);
+                setDetailsError("");
+              }}
             />
           </label>
         </div>
+        {detailsError && <p className="form-error">{detailsError}</p>}
       </section>
 
       <section>
@@ -110,6 +164,8 @@ export default function SupplierQuote() {
             onItemChange={handleItemChange}
           />
         ))}
+
+        {itemError && <p className="form-error">{itemError}</p>}
       </section>
 
       <button className="button button-primary" onClick={handleSaveQuote}>

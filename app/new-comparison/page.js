@@ -4,6 +4,8 @@ import { useContext, useState } from "react";
 import Link from "next/link";
 import { ComparisonContext } from "../context/ComparisonContext";
 
+import { useRouter } from "next/navigation";
+
 export default function NewComparison() {
   // =========================
   // STATE
@@ -24,6 +26,9 @@ export default function NewComparison() {
   // Validation messages
   const [itemError, setItemError] = useState("");
   const [formError, setFormError] = useState("");
+
+  // Route user to another screen
+  const router = useRouter();
 
   // =========================
   // REQUESTED ITEM HANDLERS
@@ -47,6 +52,7 @@ export default function NewComparison() {
     setItemName("");
     setQuantity("");
     setItemError("");
+    setFormError("");
   }
 
   // Remove the requested item at the selected array index.
@@ -81,10 +87,9 @@ export default function NewComparison() {
     };
 
     setComparison(newComparison);
-
     setFormError("");
 
-    console.log("Created comparison:", newComparison);
+    router.push("/comparison");
   }
 
   // =========================
@@ -113,7 +118,10 @@ export default function NewComparison() {
               type="text"
               placeholder="e.g. Office Furniture"
               value={comparisonName}
-              onChange={(event) => setComparisonName(event.target.value)}
+              onChange={(event) => {
+                setComparisonName(event.target.value);
+                setFormError("");
+              }}
             />
           </label>
         </section>
@@ -129,7 +137,10 @@ export default function NewComparison() {
                 type="text"
                 placeholder="e.g. Office Chair"
                 value={itemName}
-                onChange={(event) => setItemName(event.target.value)}
+                onChange={(event) => {
+                  setItemName(event.target.value);
+                  setItemError("");
+                }}
               />
             </label>
 
@@ -137,9 +148,13 @@ export default function NewComparison() {
               Quantity
               <input
                 type="number"
+                min="1"
                 placeholder="e.g. 20"
                 value={quantity}
-                onChange={(event) => setQuantity(event.target.value)}
+                onChange={(event) => {
+                  setQuantity(event.target.value);
+                  setItemError("");
+                }}
               />
             </label>
           </div>

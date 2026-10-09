@@ -7,6 +7,15 @@ import { ComparisonContext } from "../context/ComparisonContext";
 export default function Comparison() {
   const { comparison, supplierQuotes } = useContext(ComparisonContext);
 
+  function calculateItemsTotal(quote) {
+    return comparison.items.reduce((total, item, index) => {
+      const unitPrice = Number(quote.items[index].unitPrice);
+      const quantity = Number(item.quantity);
+
+      return total + unitPrice * quantity;
+    }, 0);
+  }
+
   if (!comparison) {
     return (
       <main className="page-comparison">
@@ -67,6 +76,12 @@ export default function Comparison() {
                     <td key={quoteIndex}>
                       €{quote.items[itemIndex].unitPrice}
                       <br />
+                      Subtotal: €
+                      {(
+                        Number(item.quantity) *
+                        Number(quote.items[itemIndex].unitPrice)
+                      ).toFixed(2)}
+                      <br />
                       {quote.items[itemIndex].availability}
                     </td>
                   ))}
@@ -74,10 +89,31 @@ export default function Comparison() {
               ))}
 
               <tr>
+                <th>Items Total</th>
+
+                {supplierQuotes.map((quote, index) => (
+                  <td key={index}>€{calculateItemsTotal(quote).toFixed(2)}</td>
+                ))}
+              </tr>
+
+              <tr>
                 <th>Delivery</th>
 
                 {supplierQuotes.map((quote, index) => (
                   <td key={index}>€{quote.deliveryCost}</td>
+                ))}
+              </tr>
+
+              <tr className="total-row">
+                <th>Total</th>
+
+                {supplierQuotes.map((quote, index) => (
+                  <td key={index}>
+                    €
+                    {(
+                      calculateItemsTotal(quote) + Number(quote.deliveryCost)
+                    ).toFixed(2)}
+                  </td>
                 ))}
               </tr>
 

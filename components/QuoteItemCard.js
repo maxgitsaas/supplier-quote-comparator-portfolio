@@ -10,6 +10,7 @@ export default function QuoteItemCard({ item, index, onItemChange }) {
         Unit Price
         <input
           type="number"
+          min="0"
           value={item.unitPrice}
           onChange={(event) =>
             onItemChange(index, "unitPrice", event.target.value)
