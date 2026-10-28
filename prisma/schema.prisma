@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Comparison {
+  id Int @id @default(autoincrement())
+  name String 
+  items ComparisonItem[]
+  quotes SupplierQuote[]
+}
+
+model ComparisonItem {
+  id Int @id @default(autoincrement())
+  comparisonId Int
+  name String
+  quantity Int
+  comparison Comparison @relation(fields: [comparisonId], references: [id])
+  quoteItems QuoteItem[]
+}
+
+model SupplierQuote {
+  id Int @id @default(autoincrement())
+  comparisonId Int
+  supplierName String
+  deliveryCost Decimal
+  leadTime String
+  comparison Comparison @relation(fields: [comparisonId], references: [id])
+  quoteItems QuoteItem[]
+}
+
+model QuoteItem {
+  id Int @id @default(autoincrement())
+  supplierQuoteId Int
+  comparisonItemId Int
+  unitPrice Decimal
+  availability String
+  supplierQuote SupplierQuote @relation(fields: [supplierQuoteId], references: [id])
+  comparisonItem ComparisonItem @relation(fields: [comparisonItemId], references: [id])
+}
