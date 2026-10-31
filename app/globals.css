@@ -253,3 +253,12 @@ tbody th {
   font-size: 14px;
   font-weight: 600;
 }
+
+/* Loading and empty-state messages */
+.status-message {
+  margin: 16px 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #444;
+}

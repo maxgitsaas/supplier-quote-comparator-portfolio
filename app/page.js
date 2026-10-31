@@ -30,7 +30,7 @@ export default function Home() {
           }}
         />
       ) : (
-        <p>No comparisons created yet.</p>
+        <p className="status-message">No comparison has been created yet.</p>
       )}
     </main>
   );

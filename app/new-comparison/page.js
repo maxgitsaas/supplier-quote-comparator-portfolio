@@ -3,6 +3,7 @@
 import { useContext, useState } from "react";
 import Link from "next/link";
 import { ComparisonContext } from "../context/ComparisonContext";
+import { createComparison } from "../actions";
 
 import { useRouter } from "next/navigation";
 
@@ -68,7 +69,7 @@ export default function NewComparison() {
 
   // Validate the full comparison and build
   // the final comparison object.
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     if (comparisonName.trim() === "") {
@@ -86,10 +87,19 @@ export default function NewComparison() {
       items: requestedItems,
     };
 
-    setComparison(newComparison);
-    setFormError("");
-
-    router.push("/comparison");
+    try {
+      const savedComparison = await createComparison(newComparison);
+      console.log("Saved comparison ID:", savedComparison.id);
+      setComparison({
+        ...newComparison,
+        id: savedComparison.id,
+      });
+      setFormError("");
+      router.push(`/comparison?id=${savedComparison.id}`);
+    } catch (error) {
+      console.error("Failed to save comparison:", error);
+      setFormError("Could not save comparison. Please try again.");
+    }
   }
 
   // =========================

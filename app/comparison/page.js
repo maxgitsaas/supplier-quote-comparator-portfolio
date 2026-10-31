@@ -1,11 +1,67 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { ComparisonContext } from "../context/ComparisonContext";
+import { getComparisonById } from "../actions";
+import { useSearchParams } from "next/navigation";
 
 export default function Comparison() {
-  const { comparison, supplierQuotes } = useContext(ComparisonContext);
+  const { comparison, supplierQuotes, setComparison } =
+    useContext(ComparisonContext);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [missingMessage, setMissingMessage] = useState(
+    "No comparison selected.",
+  );
+
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+
+  useEffect(() => {
+    let ignore = false;
+
+    setIsLoading(true);
+    setLoadError("");
+    setMissingMessage("No comparison selected.");
+    setComparison(null);
+
+    async function loadComparison() {
+      try {
+        const savedComparison = await getComparisonById(id);
+
+        if (!ignore) {
+          setComparison(savedComparison);
+
+          if (savedComparison === null) {
+            setMissingMessage("Comparison not found.");
+          }
+        }
+      } catch (error) {
+        if (!ignore) {
+          console.error("Failed to load comparison:", error);
+
+          setComparison(null);
+          setLoadError("Could not load comparison. Please try again.");
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    if (id) {
+      loadComparison();
+    } else {
+      setIsLoading(false);
+    }
+
+    return () => {
+      ignore = true;
+    };
+  }, [id, setComparison]);
 
   function calculateItemsTotal(quote) {
     return comparison.items.reduce((total, item, index) => {
@@ -16,10 +72,30 @@ export default function Comparison() {
     }, 0);
   }
 
+  if (isLoading) {
+    return (
+      <main className="page-comparison">
+        <p className="status-message" role="status">
+          Loading comparison...
+        </p>
+      </main>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <main className="page-comparison">
+        <p className="status-message" role="alert">
+          {loadError}
+        </p>
+      </main>
+    );
+  }
+
   if (!comparison) {
     return (
       <main className="page-comparison">
-        <p>No comparison has been created yet.</p>
+        <p className="status-message">{missingMessage}</p>
 
         <Link href="/" className="back-dashboard">
           ← Back to Dashboard
@@ -50,7 +126,7 @@ export default function Comparison() {
         <h2>Supplier Comparison</h2>
 
         {supplierQuotes.length === 0 ? (
-          <p>No supplier quotes added yet.</p>
+          <p className="status-message">No supplier quotes added yet.</p>
         ) : (
           <table>
             <thead>
