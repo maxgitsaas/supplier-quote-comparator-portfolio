@@ -11,10 +11,7 @@ export default function Comparison() {
     useContext(ComparisonContext);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [loadError, setLoadError] = useState("");
-  const [missingMessage, setMissingMessage] = useState(
-    "No comparison selected.",
-  );
+  const [errorMessage, setErrorMessage] = useState("");
 
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -23,8 +20,7 @@ export default function Comparison() {
     let ignore = false;
 
     setIsLoading(true);
-    setLoadError("");
-    setMissingMessage("No comparison selected.");
+    setErrorMessage("");
     setComparison(null);
 
     async function loadComparison() {
@@ -35,15 +31,13 @@ export default function Comparison() {
           setComparison(savedComparison);
 
           if (savedComparison === null) {
-            setMissingMessage("Comparison not found.");
+            setErrorMessage("Comparison not found.");
           }
         }
       } catch (error) {
         if (!ignore) {
           console.error("Failed to load comparison:", error);
-
-          setComparison(null);
-          setLoadError("Could not load comparison. Please try again.");
+          setErrorMessage("Could not load comparison. Please try again.");
         }
       } finally {
         if (!ignore) {
@@ -55,6 +49,7 @@ export default function Comparison() {
     if (id) {
       loadComparison();
     } else {
+      setErrorMessage("No comparison selected.");
       setIsLoading(false);
     }
 
@@ -82,20 +77,12 @@ export default function Comparison() {
     );
   }
 
-  if (loadError) {
-    return (
-      <main className="page-comparison">
-        <p className="status-message" role="alert">
-          {loadError}
-        </p>
-      </main>
-    );
-  }
-
   if (!comparison) {
     return (
       <main className="page-comparison">
-        <p className="status-message">{missingMessage}</p>
+        <p className="status-message" role="status">
+          {errorMessage}
+        </p>
 
         <Link href="/" className="back-dashboard">
           ← Back to Dashboard
