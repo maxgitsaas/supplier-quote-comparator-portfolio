@@ -23,22 +23,33 @@ export default function ComparisonView({ comparison }) {
       </Link>
 
       <header className="page-header">
-        <p className="page-header-label">Compare</p>
+        <p className="page-header-label">Comparison</p>
         <h1>{comparison.name}</h1>
       </header>
 
-      <Link
-        href={`/supplier-quote?comparisonId=${comparison.id}`}
-        className="button button-secondary page-action"
-      >
-        + Add Supplier Quote
-      </Link>
-
       <section>
-        <h2>Supplier Comparison</h2>
-
         {supplierQuotes.length === 0 ? (
-          <p className="status-message">No supplier quotes added yet.</p>
+          <div>
+            <h2>Requested Items</h2>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {comparison.items.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.name}</td>
+                    <td>{item.quantity}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <table>
             <thead>
@@ -116,6 +127,28 @@ export default function ComparisonView({ comparison }) {
           </table>
         )}
       </section>
+
+      {supplierQuotes.length === 0 ? (
+        <section>
+          <h2>Supplier Quotes</h2>
+
+          <p>No supplier quotes added yet.</p>
+
+          <Link
+            href={`/supplier-quote?comparisonId=${comparison.id}`}
+            className="button button-secondary"
+          >
+            + Add Supplier Quote
+          </Link>
+        </section>
+      ) : (
+        <Link
+          href={`/supplier-quote?comparisonId=${comparison.id}`}
+          className="button button-secondary page-action"
+        >
+          + Add Supplier Quote
+        </Link>
+      )}
     </main>
   );
 }
