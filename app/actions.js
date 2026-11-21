@@ -141,7 +141,7 @@ export async function createSupplierQuote(quote) {
       comparisonId: quote.comparisonId,
       supplierName: quote.supplierName.trim(),
       deliveryCost: quote.deliveryCost,
-      leadTime: Number(quote.leadTime),
+      leadTime: String(Number(quote.leadTime)),
 
       quoteItems: {
         create: quote.items.map((item) => ({
