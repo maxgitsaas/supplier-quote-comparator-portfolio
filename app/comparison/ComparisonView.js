@@ -1,15 +1,26 @@
 "use client";
 
-import { useContext } from "react";
 import Link from "next/link";
-import { ComparisonContext } from "../context/ComparisonContext";
 
-export default function ComparisonView({ comparison }) {
-  const { supplierQuotes } = useContext(ComparisonContext);
+export default function ComparisonView({ comparison, supplierQuotes }) {
+  // Helper function for ID-based matching
+  function getQuotedItem(quote, comparisonItemId) {
+    const quotedItem = quote.quoteItems.find(
+      (item) => item.comparisonItemId === comparisonItemId,
+    );
+
+    if (!quotedItem) {
+      throw new Error("Matching quote item not found.");
+    }
+
+    return quotedItem;
+  }
 
   function calculateItemsTotal(quote) {
-    return comparison.items.reduce((total, item, index) => {
-      const unitPrice = Number(quote.items[index].unitPrice);
+    return comparison.items.reduce((total, item) => {
+      const quotedItem = getQuotedItem(quote, item.id);
+
+      const unitPrice = Number(quotedItem.unitPrice);
       const quantity = Number(item.quantity);
 
       return total + unitPrice * quantity;
