@@ -109,10 +109,8 @@ export default function SupplierQuoteForm({ comparison }) {
 
       <header className="page-header">
         <p className="page-header-label">Enter Quote</p>
-        <h1>Supplier Quote</h1>
+        <h1>Comparison: {comparison.name}</h1>
       </header>
-
-      {comparison && <p>Comparison: {comparison.name}</p>}
 
       <Link
         href={`/comparison?id=${comparison.id}`}

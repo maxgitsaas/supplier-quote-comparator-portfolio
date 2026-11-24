@@ -29,17 +29,21 @@ export default function ComparisonView({ comparison, supplierQuotes }) {
 
   return (
     <main className="page-comparison">
+      {/* 1. Navigation */}
       <Link href="/" className="back-dashboard">
         ← Back to Dashboard
       </Link>
 
+      {/* 2. Page heading */}
       <header className="page-header">
-        <p className="page-header-label">Comparison</p>
-        <h1>{comparison.name}</h1>
+        <p className="page-header-label">Comparison View</p>
+        <h1>Comparison: {comparison.name}</h1>
       </header>
 
+      {/* 3. Main content */}
       <section>
         {supplierQuotes.length === 0 ? (
+          // CASE 1: No supplier quotes exist
           <div>
             <h2>Requested Items</h2>
 
@@ -52,104 +56,116 @@ export default function ComparisonView({ comparison, supplierQuotes }) {
               </thead>
 
               <tbody>
-                {comparison.items.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>{item.quantity}</td>
-                  </tr>
-                ))}
+                {comparison.items.map((item) => {
+                  return (
+                    <tr key={item.id}>
+                      <td>{item.name}</td>
+                      <td>{item.quantity}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         ) : (
+          // CASE 2: Supplier quotes exist
           <table>
             <thead>
               <tr>
                 <th>Item</th>
-
-                {supplierQuotes.map((quote, index) => (
-                  <th key={index}>{quote.supplierName}</th>
-                ))}
+                {supplierQuotes.map((quote) => {
+                  return <th key={quote.id}>{quote.supplierName}</th>;
+                })}
               </tr>
             </thead>
 
             <tbody>
-              {comparison.items.map((item, itemIndex) => (
-                <tr key={itemIndex}>
-                  <th>
-                    {item.name}
-                    <br />
-                    Quantity: {item.quantity}
-                  </th>
-
-                  {supplierQuotes.map((quote, quoteIndex) => (
-                    <td key={quoteIndex}>
-                      €{quote.items[itemIndex].unitPrice}
+              {comparison.items.map((item) => {
+                return (
+                  <tr key={item.id}>
+                    <th>
+                      {item.name}
                       <br />
-                      Subtotal: €
-                      {(
-                        Number(item.quantity) *
-                        Number(quote.items[itemIndex].unitPrice)
-                      ).toFixed(2)}
-                      <br />
-                      {quote.items[itemIndex].availability}
-                    </td>
-                  ))}
-                </tr>
-              ))}
+                      Quantity: {item.quantity}
+                    </th>
 
+                    {supplierQuotes.map((quote) => {
+                      const quotedItem = getQuotedItem(quote, item.id);
+                      return (
+                        <td key={quote.id}>
+                          €{Number(quotedItem.unitPrice).toFixed(2)}
+                          <br />
+                          Subtotal: €
+                          {(
+                            Number(item.quantity) * Number(quotedItem.unitPrice)
+                          ).toFixed(2)}
+                          <br />
+                          {quotedItem.availability}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
               <tr>
                 <th>Items Total</th>
-
-                {supplierQuotes.map((quote, index) => (
-                  <td key={index}>€{calculateItemsTotal(quote).toFixed(2)}</td>
-                ))}
+                {supplierQuotes.map((quote) => {
+                  return (
+                    <td key={quote.id}>
+                      €{calculateItemsTotal(quote).toFixed(2)}
+                    </td>
+                  );
+                })}
               </tr>
 
               <tr>
                 <th>Delivery</th>
-
-                {supplierQuotes.map((quote, index) => (
-                  <td key={index}>€{quote.deliveryCost}</td>
-                ))}
+                {supplierQuotes.map((quote) => {
+                  return (
+                    <td key={quote.id}>
+                      €{Number(quote.deliveryCost).toFixed(2)}
+                    </td>
+                  );
+                })}
               </tr>
 
               <tr className="total-row">
                 <th>Total</th>
-
-                {supplierQuotes.map((quote, index) => (
-                  <td key={index}>
-                    €
-                    {(
-                      calculateItemsTotal(quote) + Number(quote.deliveryCost)
-                    ).toFixed(2)}
-                  </td>
-                ))}
+                {supplierQuotes.map((quote) => {
+                  return (
+                    <td key={quote.id}>
+                      €
+                      {(
+                        Number(calculateItemsTotal(quote)) +
+                        Number(quote.deliveryCost)
+                      ).toFixed(2)}
+                    </td>
+                  );
+                })}
               </tr>
 
               <tr>
                 <th>Lead Time</th>
-
-                {supplierQuotes.map((quote, index) => (
-                  <td key={index}>{quote.leadTime} days</td>
-                ))}
+                {supplierQuotes.map((quote) => {
+                  return <td key={quote.id}>{Number(quote.leadTime)} days</td>;
+                })}
               </tr>
             </tbody>
           </table>
         )}
       </section>
 
+      {/* 4. Supplier Quote navigation */}
       {supplierQuotes.length === 0 ? (
         <section>
           <h2>Supplier Quotes</h2>
-
           <p>No supplier quotes added yet.</p>
 
           <Link
             href={`/supplier-quote?comparisonId=${comparison.id}`}
             className="button button-secondary"
           >
-            + Add Supplier Quote
+            Add Supplier Quote
           </Link>
         </section>
       ) : (
@@ -157,7 +173,7 @@ export default function ComparisonView({ comparison, supplierQuotes }) {
           href={`/supplier-quote?comparisonId=${comparison.id}`}
           className="button button-secondary page-action"
         >
-          + Add Supplier Quote
+          Add Supplier Quote
         </Link>
       )}
     </main>
