@@ -103,6 +103,18 @@ main > div p {
   margin: 6px 0;
 }
 
+.comparison-card-counts {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.comparison-card-color {
+  flex: 0 0 6px;
+  margin-block: 6px;
+  border-radius: 999px;
+}
+
 section {
   background: white;
   padding: 20px;

@@ -1,0 +1,123 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.toolbar :global(.back-dashboard) {
+  margin-bottom: 0;
+}
+
+.colorPicker {
+  position: relative;
+  z-index: 3;
+  flex-shrink: 0;
+}
+
+.colorPicker summary {
+  list-style: none;
+  padding: 6px 10px;
+  font-size: 0.875rem;
+}
+
+.colorPicker summary::-webkit-details-marker {
+  display: none;
+}
+
+.colorDot {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #777;
+  border-radius: 50%;
+}
+
+.colorChevron {
+  color: #595959;
+}
+
+.colorForm {
+  position: absolute;
+  inset-inline-end: 0;
+  top: calc(100% + 6px);
+  display: grid;
+  gap: 10px;
+  width: 190px;
+  padding: 14px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+  box-shadow: 0 6px 20px #19162c1a;
+  font-size: 0.875rem;
+}
+
+.colorForm select {
+  width: 100%;
+  padding: 7px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  background: white;
+  color: inherit;
+  font: inherit;
+}
+
+.colorForm p {
+  margin: 0;
+}
+
+.colorStatus {
+  color: #275e4a;
+}
+
+.itemRow th,
+.itemRow td {
+  padding-block: 15px;
+  vertical-align: top;
+  border-color: #e8e5ed;
+  background: white;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  line-height: 1.45;
+}
+
+.itemRow th {
+  border-inline-start-color: #ddd;
+}
+
+.itemRow td {
+  border-inline-start: 0;
+  border-inline-end: 0;
+}
+
+.itemRow td:last-child {
+  border-inline-end: 1px solid #ddd;
+}
+
+.itemRow .itemQuote {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.itemName,
+.lineTotal {
+  display: block;
+  font-weight: 600;
+}
+
+.quantity,
+.unitPrice,
+.availability {
+  display: block;
+  color: #575263;
+  font-size: 0.875em;
+  font-weight: 400;
+}
+
+.quantity,
+.unitPrice {
+  margin-top: 3px;
+}
+
+.availability {
+  margin-top: 6px;
+}

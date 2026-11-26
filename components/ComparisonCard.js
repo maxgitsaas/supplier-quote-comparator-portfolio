@@ -1,12 +1,27 @@
 import Link from "next/link";
+import { getComparisonColor } from "@/lib/comparison-colors";
 
 export default function ComparisonCard({ comparison }) {
+  const color = getComparisonColor(comparison.color);
+
   return (
     <div>
       <h3>{comparison.name}</h3>
 
-      <p>{comparison.items} items</p>
-      <p>{comparison.suppliers} supplier quotes</p>
+      <div className="comparison-card-counts">
+        {color && (
+          <span
+            className="comparison-card-color"
+            style={{ backgroundColor: color.hex }}
+            role="img"
+            aria-label={`Comparison color: ${color.label}`}
+          />
+        )}
+        <div>
+          <p>{comparison.items} items</p>
+          <p>{comparison.suppliers} supplier quotes</p>
+        </div>
+      </div>
 
       <Link
         href={`/comparison?id=${comparison.id}`}

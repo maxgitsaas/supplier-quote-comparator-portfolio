@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { Prisma } from "@/generated/prisma/client";
+import ComparisonColorPicker from "./ComparisonColorPicker";
+import styles from "./ComparisonView.module.css";
 
 export default function ComparisonView({ comparison }) {
   const supplierQuotes = comparison.quotes;
@@ -28,9 +30,16 @@ export default function ComparisonView({ comparison }) {
   return (
     <main className="page-comparison">
       {/* 1. Navigation */}
-      <Link href="/" className="back-dashboard">
-        ← Back to Dashboard
-      </Link>
+      <nav className={styles.toolbar} aria-label="Comparison actions">
+        <Link href="/" className="back-dashboard">
+          ← Back to Dashboard
+        </Link>
+        <ComparisonColorPicker
+          key={comparison.id}
+          comparisonId={comparison.id}
+          color={comparison.color}
+        />
+      </nav>
 
       {/* 2. Page heading */}
       <header className="page-header">
@@ -80,23 +89,25 @@ export default function ComparisonView({ comparison }) {
             <tbody>
               {comparison.items.map((item) => {
                 return (
-                  <tr key={item.id}>
-                    <th>
-                      {item.name}
-                      <br />
-                      Quantity: {item.quantity}
+                  <tr key={item.id} className={styles.itemRow}>
+                    <th scope="row">
+                      <span className={styles.itemName}>{item.name}</span>
+                      <span className={styles.quantity}>Quantity: {item.quantity}</span>
                     </th>
 
                     {supplierQuotes.map((quote) => {
                       const quotedItem = getQuotedItem(quote, item.id);
                       return (
-                        <td key={quote.id}>
-                          €{quotedItem.unitPrice.toFixed(2)}
-                          <br />
-                          Subtotal: €
-                          {quotedItem.unitPrice.times(item.quantity).toFixed(2)}
-                          <br />
-                          {quotedItem.availability}
+                        <td key={quote.id} className={styles.itemQuote}>
+                          <span className={styles.lineTotal}>
+                            €{quotedItem.unitPrice.times(item.quantity).toFixed(2)}
+                          </span>
+                          <span className={styles.unitPrice}>
+                            €{quotedItem.unitPrice.toFixed(2)} per unit
+                          </span>
+                          <span className={styles.availability}>
+                            {quotedItem.availability}
+                          </span>
                         </td>
                       );
                     })}
