@@ -95,6 +95,41 @@
 
 .comparisonTable {
   font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: 0.9375rem;
+  color: #292632;
+  font-variant-numeric: tabular-nums;
+}
+
+.comparisonTable :is(th, td) {
+  border-color: #e2dfea;
+}
+
+.comparisonTable thead th {
+  background: #f2eff7;
+  color: #373241;
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+.comparisonTable thead th:not(:first-child),
+.comparisonTable td:not(:first-child) {
+  text-align: right;
+}
+
+.comparisonTable tbody tr:not(.itemRow, :global(.total-row)) > th,
+.comparisonTable tbody tr:not(.itemRow, :global(.total-row)) > th ~ td {
+  background: #f9f8fb;
+  color: #474252;
+  font-size: 0.875rem;
+}
+
+.comparisonTable tbody th {
+  font-weight: 600;
+}
+
+.comparisonTable :global(.total-row) :is(th, td) {
+  color: #244633;
+  font-weight: 700;
 }
 
 .itemRow th,
@@ -120,8 +155,7 @@
 }
 
 .itemRow .itemQuote {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
+  color: #292632;
 }
 
 .itemName,
