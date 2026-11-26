@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-export default function Error({ reset }) {
+export default function Error({ retry }) {
   return (
     <main className="page-comparison">
       <p className="status-message" role="alert">
@@ -12,7 +12,7 @@ export default function Error({ reset }) {
       <button
         type="button"
         className="button button-secondary"
-        onClick={() => reset()}
+        onClick={retry}
       >
         Try Again
       </button>

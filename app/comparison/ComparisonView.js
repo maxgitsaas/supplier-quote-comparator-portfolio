@@ -1,8 +1,9 @@
-"use client";
-
 import Link from "next/link";
+import { Prisma } from "@/generated/prisma/client";
 
-export default function ComparisonView({ comparison, supplierQuotes }) {
+export default function ComparisonView({ comparison }) {
+  const supplierQuotes = comparison.quotes;
+
   // Helper function for ID-based matching
   function getQuotedItem(quote, comparisonItemId) {
     const quotedItem = quote.quoteItems.find(
@@ -20,11 +21,8 @@ export default function ComparisonView({ comparison, supplierQuotes }) {
     return comparison.items.reduce((total, item) => {
       const quotedItem = getQuotedItem(quote, item.id);
 
-      const unitPrice = Number(quotedItem.unitPrice);
-      const quantity = Number(item.quantity);
-
-      return total + unitPrice * quantity;
-    }, 0);
+      return total.plus(quotedItem.unitPrice.times(item.quantity));
+    }, new Prisma.Decimal(0));
   }
 
   return (
@@ -93,12 +91,10 @@ export default function ComparisonView({ comparison, supplierQuotes }) {
                       const quotedItem = getQuotedItem(quote, item.id);
                       return (
                         <td key={quote.id}>
-                          €{Number(quotedItem.unitPrice).toFixed(2)}
+                          €{quotedItem.unitPrice.toFixed(2)}
                           <br />
                           Subtotal: €
-                          {(
-                            Number(item.quantity) * Number(quotedItem.unitPrice)
-                          ).toFixed(2)}
+                          {quotedItem.unitPrice.times(item.quantity).toFixed(2)}
                           <br />
                           {quotedItem.availability}
                         </td>
@@ -123,7 +119,7 @@ export default function ComparisonView({ comparison, supplierQuotes }) {
                 {supplierQuotes.map((quote) => {
                   return (
                     <td key={quote.id}>
-                      €{Number(quote.deliveryCost).toFixed(2)}
+                      €{quote.deliveryCost.toFixed(2)}
                     </td>
                   );
                 })}
@@ -135,10 +131,7 @@ export default function ComparisonView({ comparison, supplierQuotes }) {
                   return (
                     <td key={quote.id}>
                       €
-                      {(
-                        Number(calculateItemsTotal(quote)) +
-                        Number(quote.deliveryCost)
-                      ).toFixed(2)}
+                      {calculateItemsTotal(quote).plus(quote.deliveryCost).toFixed(2)}
                     </td>
                   );
                 })}
@@ -147,7 +140,10 @@ export default function ComparisonView({ comparison, supplierQuotes }) {
               <tr>
                 <th>Lead Time</th>
                 {supplierQuotes.map((quote) => {
-                  return <td key={quote.id}>{Number(quote.leadTime)} days</td>;
+                  const leadTime = /^\d+$/.test(quote.leadTime)
+                    ? `${quote.leadTime} days`
+                    : quote.leadTime;
+                  return <td key={quote.id}>{leadTime}</td>;
                 })}
               </tr>
             </tbody>

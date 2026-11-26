@@ -39,8 +39,9 @@ export default async function ComparisonPage({ searchParams }) {
   const comparison = await prisma.comparison.findUnique({
     where: { id: numericId },
     include: {
-      items: true,
+      items: { orderBy: { id: "asc" } },
       quotes: {
+        orderBy: { id: "asc" },
         include: {
           quoteItems: true,
         },
@@ -53,29 +54,5 @@ export default async function ComparisonPage({ searchParams }) {
     return <StatusPage message="Comparison not found." />;
   }
 
-  // 6. Prepare supplier quotes for the Client Component
-  const supplierQuotes = comparison.quotes.map((quote) => ({
-    id: quote.id,
-    supplierName: quote.supplierName,
-    deliveryCost: quote.deliveryCost.toString(),
-    leadTime: quote.leadTime,
-    quoteItems: quote.quoteItems.map((item) => ({
-      id: item.id,
-      comparisonItemId: item.comparisonItemId,
-      unitPrice: item.unitPrice.toString(),
-      availability: item.availability,
-    })),
-  }));
-
-  // 7. Pass the prepared data to ComparisonView
-  return (
-    <ComparisonView
-      comparison={{
-        id: comparison.id,
-        name: comparison.name,
-        items: comparison.items,
-      }}
-      supplierQuotes={supplierQuotes}
-    />
-  );
+  return <ComparisonView comparison={comparison} />;
 }

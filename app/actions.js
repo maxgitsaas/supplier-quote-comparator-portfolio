@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 
 export async function createComparison(comparison) {
@@ -12,6 +13,7 @@ export async function createComparison(comparison) {
     },
   });
 
+  revalidatePath("/");
   return savedComparison;
 }
 
@@ -155,5 +157,7 @@ export async function createSupplierQuote(quote) {
     select: { id: true },
   });
 
+  revalidatePath("/");
+  revalidatePath("/comparison");
   return savedQuote;
 }

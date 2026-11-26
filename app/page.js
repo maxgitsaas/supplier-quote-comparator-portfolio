@@ -1,12 +1,18 @@
-"use client";
-
-import { useContext } from "react";
 import Link from "next/link";
+import { connection } from "next/server";
 import ComparisonCard from "@/components/ComparisonCard";
-import { ComparisonContext } from "./context/ComparisonContext";
+import prisma from "@/lib/prisma";
 
-export default function Home() {
-  const { comparison, supplierQuotes } = useContext(ComparisonContext);
+export default async function Home() {
+  await connection();
+  const comparisons = await prisma.comparison.findMany({
+    orderBy: { id: "desc" },
+    select: {
+      id: true,
+      name: true,
+      _count: { select: { items: true, quotes: true } },
+    },
+  });
 
   return (
     <main className="page-dashboard">
@@ -21,14 +27,18 @@ export default function Home() {
 
       <h2>Your Comparisons</h2>
 
-      {comparison ? (
-        <ComparisonCard
-          comparison={{
-            name: comparison.name,
-            items: comparison.items.length,
-            suppliers: supplierQuotes.length,
-          }}
-        />
+      {comparisons.length > 0 ? (
+        comparisons.map(({ id, name, _count }) => (
+          <ComparisonCard
+            key={id}
+            comparison={{
+              id,
+              name,
+              items: _count.items,
+              suppliers: _count.quotes,
+            }}
+          />
+        ))
       ) : (
         <p className="status-message">No comparison has been created yet.</p>
       )}

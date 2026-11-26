@@ -8,7 +8,10 @@ export default function ComparisonCard({ comparison }) {
       <p>{comparison.items} items</p>
       <p>{comparison.suppliers} supplier quotes</p>
 
-      <Link href="/comparison" className="button button-secondary">
+      <Link
+        href={`/comparison?id=${comparison.id}`}
+        className="button button-secondary"
+      >
         View Comparison
       </Link>
     </div>

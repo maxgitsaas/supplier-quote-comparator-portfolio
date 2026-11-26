@@ -1,8 +1,7 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { ComparisonContext } from "../context/ComparisonContext";
 import { createComparison } from "../actions";
 
 import { useRouter } from "next/navigation";
@@ -11,8 +10,6 @@ export default function NewComparison() {
   // =========================
   // STATE
   // =========================
-
-  const { setComparison } = useContext(ComparisonContext);
 
   // Overall comparison data
   const [comparisonName, setComparisonName] = useState("");
@@ -89,11 +86,6 @@ export default function NewComparison() {
 
     try {
       const savedComparison = await createComparison(newComparison);
-      console.log("Saved comparison ID:", savedComparison.id);
-      setComparison({
-        ...newComparison,
-        id: savedComparison.id,
-      });
       setFormError("");
       router.push(`/comparison?id=${savedComparison.id}`);
     } catch (error) {
