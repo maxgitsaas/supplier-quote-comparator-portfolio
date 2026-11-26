@@ -10,7 +10,6 @@ export default async function Home() {
     select: {
       id: true,
       name: true,
-      color: true,
       _count: { select: { items: true, quotes: true } },
     },
   });
@@ -29,13 +28,12 @@ export default async function Home() {
       <h2>Your Comparisons</h2>
 
       {comparisons.length > 0 ? (
-        comparisons.map(({ id, name, color, _count }) => (
+        comparisons.map(({ id, name, _count }) => (
           <ComparisonCard
             key={id}
             comparison={{
               id,
               name,
-              color,
               items: _count.items,
               suppliers: _count.quotes,
             }}
