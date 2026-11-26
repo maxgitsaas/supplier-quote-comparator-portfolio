@@ -2,8 +2,10 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
+import ComparisonHeader from "@/components/ComparisonHeader";
 import QuoteItemCard from "@/components/QuoteItemCard";
 import { useRouter } from "next/navigation";
+import { readLeadTimeDays } from "@/lib/lead-time";
 import { createSupplierQuote } from "../actions";
 
 export default function SupplierQuoteForm({ comparison }) {
@@ -56,8 +58,8 @@ export default function SupplierQuoteForm({ comparison }) {
       return;
     }
 
-    if (leadTime === "" || Number(leadTime) < 0) {
-      setDetailsError("Please enter a valid lead time.");
+    if (readLeadTimeDays(leadTime) === null) {
+      setDetailsError("Enter lead time as a nonnegative number of whole days.");
       return;
     }
 
@@ -107,10 +109,7 @@ export default function SupplierQuoteForm({ comparison }) {
         ← Back to Dashboard
       </Link>
 
-      <header className="page-header">
-        <p className="page-header-label">Enter Quote</p>
-        <h1>Comparison: {comparison.name}</h1>
-      </header>
+      <ComparisonHeader comparison={comparison} label="Enter Quote" />
 
       <Link
         href={`/comparison?id=${comparison.id}`}
@@ -151,11 +150,11 @@ export default function SupplierQuoteForm({ comparison }) {
           </label>
 
           <label>
-            Lead Time
+            Lead time (days)
             <input
               type="number"
               min="0"
-              placeholder="e.g. 7"
+              step="1"
               value={leadTime}
               onChange={(event) => {
                 setLeadTime(event.target.value);

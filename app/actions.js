@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { getComparisonColor } from "@/lib/comparison-colors";
+import { readLeadTimeDays } from "@/lib/lead-time";
 import prisma from "@/lib/prisma";
 
 export async function createComparison(comparison) {
@@ -55,6 +56,7 @@ export async function updateComparisonColor(id, _previousState, formData) {
 
   revalidatePath("/");
   revalidatePath("/comparison");
+  revalidatePath("/supplier-quote");
   return { message: "Color saved." };
 }
 
@@ -91,15 +93,8 @@ export async function createSupplierQuote(quote) {
     throw new Error("Invalid delivery cost.");
   }
 
-  // 5. Validate lead time
-  if (
-    quote.leadTime == null ||
-    String(quote.leadTime).trim() === "" ||
-    !Number.isSafeInteger(Number(quote.leadTime)) ||
-    Number(quote.leadTime) < 0
-  ) {
-    throw new Error("Invalid lead time.");
-  }
+  const leadTimeDays = readLeadTimeDays(quote.leadTime);
+  if (leadTimeDays === null) throw new Error("Invalid lead time.");
 
   // 6. Validate quote items array
   if (!Array.isArray(quote.items) || quote.items.length === 0) {
@@ -171,7 +166,7 @@ export async function createSupplierQuote(quote) {
       comparisonId: quote.comparisonId,
       supplierName: quote.supplierName.trim(),
       deliveryCost: quote.deliveryCost,
-      leadTime: String(Number(quote.leadTime)),
+      leadTime: String(leadTimeDays),
 
       quoteItems: {
         create: quote.items.map((item) => ({

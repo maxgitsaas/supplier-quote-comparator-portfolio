@@ -30,6 +30,9 @@ model SupplierQuote {
   supplierName String
   deliveryCost Decimal
   leadTime String
+  arrivalDays Int?
+  readyDays Int?
+  transitDays Int?
   comparison Comparison @relation(fields: [comparisonId], references: [id])
   quoteItems QuoteItem[]
 }

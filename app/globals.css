@@ -217,19 +217,15 @@ tbody th {
   --page-accent-light: #dbeafe;
 }
 
-.page-new-comparison {
-  --page-accent: #15803d;
-  --page-accent-light: #dcfce7;
-}
-
-.page-supplier-quote {
-  --page-accent: #b45309;
-  --page-accent-light: #fef3c7;
+.page-new-comparison,
+.page-supplier-quote,
+.page-comparison {
+  --page-accent: #5b6169;
+  --page-accent-light: #edf0f2;
 }
 
 .page-comparison {
-  --page-accent: #6d28d9;
-  --page-accent-light: #ede9fe;
+  max-width: 74rem;
 }
 
 .page-header {
@@ -253,6 +249,23 @@ tbody th {
 
 .page-header h1 {
   margin: 0;
+}
+
+.comparison-header {
+  --header-accent: var(--comparison-accent, var(--page-accent));
+  background: color-mix(in srgb, var(--header-accent) 11%, white);
+  border-left-color: var(--header-accent);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+
+.comparison-header .page-header-label {
+  color: color-mix(in srgb, var(--header-accent) 78%, black);
+}
+
+.comparison-header h1 {
+  font-size: clamp(1.25rem, 1.05rem + 0.7vw, 1.625rem);
+  font-weight: 600;
+  line-height: 1.25;
 }
 
 .page-action {
