@@ -1,0 +1,242 @@
+.page {
+  max-width: 1120px;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.toolbar :global(.back-dashboard) {
+  margin-bottom: 0;
+}
+
+.colorPicker {
+  position: relative;
+  z-index: 3;
+  flex-shrink: 0;
+}
+
+.colorPicker summary {
+  list-style: none;
+  padding: 6px 10px;
+  font-size: 0.875rem;
+}
+
+.colorPicker summary::-webkit-details-marker {
+  display: none;
+}
+
+.colorDot {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #777;
+  border-radius: 50%;
+}
+
+.colorChevron {
+  color: #595959;
+}
+
+.colorForm {
+  position: absolute;
+  inset-inline-end: 0;
+  top: calc(100% + 6px);
+  display: grid;
+  gap: 10px;
+  width: 190px;
+  padding: 14px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+  box-shadow: 0 6px 20px #19162c1a;
+  font-size: 0.875rem;
+}
+
+.colorForm select {
+  width: 100%;
+  padding: 7px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  background: white;
+  color: inherit;
+  font: inherit;
+}
+
+.colorForm p {
+  margin: 0;
+}
+
+.colorStatus {
+  color: #275e4a;
+}
+
+.quoteSection {
+  padding: 0;
+}
+
+.scrollRegion {
+  display: block;
+  overflow-x: auto;
+  margin: 0;
+  border-radius: 8px;
+}
+
+.scrollRegion:focus-visible {
+  outline: 2px solid var(--page-accent);
+  outline-offset: 2px;
+}
+
+.quoteTable {
+  --table-header: #f7f6fb;
+  --table-footer: #f8f7fb;
+  --table-divider: #e8e5ed;
+  --table-muted: #575263;
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+}
+
+.quoteTable :is(th, td) {
+  width: auto;
+  padding: 15px 18px;
+  border: 0;
+  border-bottom: 1px solid var(--table-divider);
+  background: white;
+  text-align: right;
+  vertical-align: top;
+}
+
+.quoteTable thead th {
+  background: var(--table-header);
+  vertical-align: bottom;
+}
+
+.quoteTable .supplierColumn {
+  min-width: 12.5rem;
+}
+
+.quoteTable .itemColumn {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+  width: 26%;
+  min-width: 11rem;
+  box-shadow: 1px 0 var(--table-divider);
+  text-align: left;
+}
+
+.supplierName,
+.summaryTotal,
+.summaryDetail,
+.leadTime,
+.itemName,
+.quantity,
+.lineTotal,
+.unitPrice,
+.availability {
+  display: block;
+}
+
+.supplierName,
+.itemName,
+.lineTotal {
+  font-weight: 600;
+}
+
+.supplierName {
+  overflow-wrap: anywhere;
+}
+
+.summaryTotal {
+  margin-top: 6px;
+  font-size: 1.65rem;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.summaryTotal,
+.lineTotal {
+  white-space: nowrap;
+}
+
+.summaryDetail,
+.leadTime,
+.quantity,
+.unitPrice,
+.availability {
+  color: var(--table-muted);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
+.leadTime {
+  margin-top: 7px;
+}
+
+.lowest,
+.fastest {
+  display: inline-block;
+  margin-inline-start: 6px;
+  padding: 1px 6px;
+  border-radius: 5px;
+  color: #135641;
+  background: #e5f4eb;
+  font-size: 0.75rem;
+  font-weight: 550;
+  white-space: nowrap;
+}
+
+.fastest {
+  color: #4d347c;
+  background: #ede6fa;
+}
+
+.quantity,
+.unitPrice {
+  margin-top: 2px;
+}
+
+.availability {
+  margin-top: 5px;
+}
+
+.quoteTable tfoot :is(th, td) {
+  padding-block: 9px;
+  background: var(--table-footer);
+  font-weight: 500;
+}
+
+.quoteTable tfoot tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.requestedItems :is(th, td):last-child {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 560px) {
+  .page {
+    padding-inline: 14px;
+  }
+
+  .quoteTable :is(th, td) {
+    padding-inline: 12px;
+  }
+
+  .quoteTable .itemColumn {
+    min-width: 8rem;
+  }
+
+  .quoteTable .supplierColumn {
+    min-width: 10rem;
+  }
+}

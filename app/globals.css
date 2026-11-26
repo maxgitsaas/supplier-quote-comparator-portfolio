@@ -103,6 +103,14 @@ main > div p {
   margin: 6px 0;
 }
 
+.comparison-card-color {
+  display: block;
+  width: 36px;
+  height: 9px;
+  margin: 12px 0 10px;
+  border-radius: 999px;
+}
+
 section {
   background: white;
   padding: 20px;

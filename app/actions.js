@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getComparisonColor } from "@/lib/comparison-colors";
 import prisma from "@/lib/prisma";
 
 export async function createComparison(comparison) {
@@ -28,6 +29,33 @@ export async function getComparisonById(id) {
   });
 
   return comparison;
+}
+
+export async function updateComparisonColor(id, _previousState, formData) {
+  if (!Number.isInteger(id) || id < 1 || id > 2147483647) {
+    return { error: "Invalid comparison." };
+  }
+
+  const color = formData.get("color");
+  if (color !== "" && !getComparisonColor(color)) {
+    return { error: "Choose a color from the list." };
+  }
+
+  try {
+    const { count } = await prisma.comparison.updateMany({
+      where: { id },
+      data: { color: color || null },
+    });
+
+    if (count === 0) return { error: "Comparison not found." };
+  } catch (error) {
+    console.error("Failed to update comparison color:", error);
+    return { error: "Could not save the color. Please try again." };
+  }
+
+  revalidatePath("/");
+  revalidatePath("/comparison");
+  return { message: "Color saved." };
 }
 
 export async function createSupplierQuote(quote) {
