@@ -54,7 +54,7 @@ export default function ComparisonView({ comparison }) {
           <div>
             <h2>Requested Items</h2>
 
-            <table>
+            <table className={styles.comparisonTable}>
               <thead>
                 <tr>
                   <th>Item</th>
@@ -76,7 +76,7 @@ export default function ComparisonView({ comparison }) {
           </div>
         ) : (
           // CASE 2: Supplier quotes exist
-          <table>
+          <table className={styles.comparisonTable}>
             <thead>
               <tr>
                 <th>Item</th>
