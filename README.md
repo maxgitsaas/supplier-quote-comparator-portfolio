@@ -1,36 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Supplier Quote Comparator
 
-## Getting Started
+A full-stack B2B web application for comparing supplier quotations in a structured, side-by-side view.
 
-First, run the development server:
+**Status:** Working development prototype, designed for local use.  
+**Stack:** Next.js · React · JavaScript · Prisma · PostgreSQL
+
+## The problem
+
+When a business requests quotations from several suppliers for the same purchase, it may have to consolidate prices, quantities, availability, delivery costs and lead times from separate documents or emails. This makes it difficult to compare offers consistently and understand the trade-offs.
+
+Supplier Quote Comparator turns that workflow into a structured application: the buyer defines the requested items once, records each supplier's offer against those items, and compares the results in one place.
+
+## Core functionality
+
+- Create and save purchasing comparisons with a shared list of requested items and quantities.
+- Enter multiple supplier quotes, including unit prices, item availability, delivery costs and lead times.
+- Compare item subtotals, delivery-inclusive totals and supplier information side by side.
+- View a decision summary highlighting price savings and the shortest comparable lead time.
+- Expand item details and assign colour labels to saved comparisons.
+- Reopen saved comparisons from a database-backed dashboard after a browser refresh.
+
+The application supports purchasing decisions rather than automatically choosing a supplier. Quote entry is manual in the current version.
+
+## Technical architecture
+
+```mermaid
+flowchart TD
+    A[React forms and interface] -->|Create or update| B[Next.js Server Actions]
+    C[Next.js Server Components] -->|Read| D[Prisma Client]
+    B -->|Validate and persist| D
+    D --> E[(PostgreSQL)]
+    E --> D
+    D --> C
+    C --> F[Dashboard and comparison view]
+```
+
+React state handles values while a user edits a form. Server Actions handle database writes; server-side pages retrieve saved records through Prisma. Quote totals are calculated from stored quantities, unit prices and delivery costs using decimal arithmetic rather than persisted as redundant totals.
+
+### Relational data model
+
+```mermaid
+erDiagram
+    Comparison ||--o{ ComparisonItem : contains
+    Comparison ||--o{ SupplierQuote : receives
+    SupplierQuote ||--o{ QuoteItem : contains
+    ComparisonItem ||--o{ QuoteItem : references
+```
+
+Each quote line references the original requested item by ID, allowing supplier offers to be compared against the same item list. Supplier quote validation checks that submitted item IDs belong to the selected comparison and appear exactly once.
+
+### Technology and implementation
+
+| Layer | Technology |
+| --- | --- |
+| Application framework | Next.js 16 (App Router) |
+| Interface | React 19, JavaScript, CSS modules |
+| Backend | Next.js Server Actions and server-side database queries |
+| Data access | Prisma ORM 7 and PostgreSQL adapter |
+| Database | PostgreSQL (Neon in my development setup) |
+| Version control | Git and GitHub |
+
+## Development process and my contribution
+
+I built this project independently as a practical software engineering and product development project, using AI assistance for learning, implementation support and troubleshooting.
+
+I started by mapping the procurement workflow, defining the minimum data model and designing the core screens. I then built a static React interface, introduced interactive forms and shared client-side state, and gradually replaced temporary state with a persistent PostgreSQL-backed architecture.
+
+My focus has been to understand the application end to end: how user input becomes a server-side operation, how related records are stored and retrieved, and how the interface transforms that data into useful business information. I developed the application incrementally, using Git commits and milestone tags to record progress.
+
+## Run locally
+
+### Prerequisites
+
+- Node.js 24 and npm
+- A separate PostgreSQL development database (local or hosted)
+
+Clone the repository and install its locked dependencies:
+
+```bash
+git clone https://github.com/maxgitsaas/supplier-quote-comparator-portfolio.git
+cd supplier-quote-comparator-portfolio
+npm ci
+```
+
+Create a `.env` file at the repository root containing your own database connection string:
+
+```dotenv
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE"
+```
+
+Replace the placeholders with your development database credentials. Hosted databases may require additional SSL connection parameters. Never commit this file or use another person's database credentials.
+
+Apply the included migrations to your dedicated development database and generate Prisma Client:
+
+```bash
+npx prisma migrate deploy --config prisma7.config.ts
+npx prisma generate --config prisma7.config.ts
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Create a comparison, add requested items, and enter two or more supplier quotations to explore the workflow.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Additional project commands:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+```
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+```text
+app/                 Pages, forms, comparison interface and server actions
+components/          Reusable React components
+lib/                 Database access and shared helpers
+prisma/              Relational schema and database migrations
+prisma7.config.ts    Prisma configuration
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Current scope and next steps
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This is a single-user development prototype, not a production procurement system. It does not currently include authentication, comprehensive edit/delete workflows, PDF uploads or AI-based quote extraction. Do not deploy the writable application publicly without adding appropriate access controls and further validation.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+A future extension would let users upload supplier quotation PDFs, extract structured values with AI, and review uncertain item matches before saving. The existing manual workflow and relational model provide the foundation for that extension.
